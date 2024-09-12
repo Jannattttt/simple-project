@@ -1,0 +1,47 @@
+   .inputForm {
+    height: 150px; /* Adjust height to accommodate two inputs */
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.inputForm > input,
+.inputForm > textarea,
+.inputForm > button {
+    outline: none;
+    border: none;
+    font-size: 1.4rem;
+    color: #000;
+}
+
+.inputForm > input {
+    height: 5vh;
+    width: 80%;
+    box-shadow: 1px 1px 6px -2px #000;
+    background: #F3F8FF;
+    border-radius: 50px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.inputForm > textarea {
+    height: 5vh;
+    width: 80%;
+    box-shadow: 1px 1px 6px -2px #000;
+    background: #F3F8FF;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+    resize: none;
+}
+
+.inputForm > button {
+    padding: 5px 10px;
+    background: #FFB534;
+    cursor: pointer;
+    font-weight: 500;
+    border-radius: 5px;
+    margin-top: 10px;
+}
