@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TodoTypes from '../todo';
 import TodoService from '../TodoService';
 import { FaEdit, FaCheck } from "react-icons/fa";
@@ -6,41 +7,40 @@ import { GiCancel } from "react-icons/gi";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 import TodoForm from './TodoForm';
 import "../CSS/TodoList.css";
-import { fetchtasks } from '../api/tasksService';
-import { deleteTask } from '../api/tasksService';
-import { updateTask } from '../api/tasksService';
+import { fetchtasks, deleteTask, updateTask } from '../api/tasksService';
 
 const TodoList = () => {
-    const [todos, setTodos] = useState<TodoTypes[]>(TodoService.getTodos());
+    const [todos, setTodos] = useState<TodoTypes[]>([]);
     const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
     const [editedTodoText, setEditedTodoText] = useState<string>("");
     const [editedTodoAssignee, setEditedTodoAssignee] = useState<string>("");
     const [editedTodoDescription, setEditedTodoDescription] = useState<string>("");
-    
-     const [loading, setLoading] = useState<boolean>(true);
-      const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const handleEditStart = (id: number, title: string, assigneeName: string, description: string) => {
+    const navigate = useNavigate();
+
+    const handleEditStart = (id: number, assigneeName: string,  title: string, description: string) => {
         setEditingTodoId(id);
-        setEditedTodoText(title);
         setEditedTodoAssignee(assigneeName);
+        setEditedTodoText(title);
         setEditedTodoDescription(description);
     };
 
     const handleEditCancel = () => {
         setEditingTodoId(null);
-        setEditedTodoText("");
         setEditedTodoAssignee("");
+        setEditedTodoText("");
         setEditedTodoDescription("");
     };
 
     const handleEditSave = async (id: number) => {
-        if (editedTodoText.trim() !== "" && editedTodoDescription.trim() !== "" && editedTodoAssignee.trim() !== "") {
+        if (editedTodoAssignee.trim() !== "" && editedTodoText.trim() !== "" && editedTodoDescription.trim() !== "") {
             const updatedTask = {
                 id,
-                title: editedTodoText,
-                description: editedTodoDescription,
                 assigneeName: editedTodoAssignee, 
+                title: editedTodoText,
+                description: editedTodoDescription,                
                 createdBy: "Firdaus",
                 modifiedBy: "Selom"
             };
@@ -49,8 +49,8 @@ const TodoList = () => {
 
             setTodos((prevTodos) => prevTodos.map((todo) => (todo.id === id ? response : todo)));
             setEditingTodoId(null);
-            setEditedTodoText("");
             setEditedTodoAssignee("");
+            setEditedTodoText("");            
             setEditedTodoDescription("");
         }
     };
@@ -92,14 +92,14 @@ const TodoList = () => {
                         <div className="editedText">
                             <input
                                 type="text"
-                                value={editedTodoText}
-                                onChange={(e) => setEditedTodoText(e.target.value)}
+                                value={editedTodoAssignee}
+                                onChange={(e) => setEditedTodoAssignee(e.target.value)}
                                 autoFocus
                             />
                             <input
                                 type="text"
-                                value={editedTodoAssignee}
-                                onChange={(e) => setEditedTodoAssignee(e.target.value)}
+                                value={editedTodoText}
+                                onChange={(e) => setEditedTodoText(e.target.value)}
                             />
                             <textarea
                                 value={editedTodoDescription}
@@ -116,7 +116,7 @@ const TodoList = () => {
                         </div>
                     ) : (
                         <div className="editBtn">
-                            <div>
+                            <div onClick={() => navigate(`/todo/${todo.id}`)}>
                                 <strong>{todo.assigneeName}</strong>
                                 <p>{todo.title}</p>
                                 <p>{todo.description}</p>
